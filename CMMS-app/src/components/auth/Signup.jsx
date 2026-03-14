@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, Loader2, ArrowRight, Building, Hash, Phone, Shield, Home } from 'lucide-react';
 import { validateEmail, validatePassword, validateName, validateRequiredField } from '../../utils/validation';
@@ -11,6 +11,25 @@ export default function Signup({ setView, initialRole = 'student' }) {
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [halls, setHalls] = useState([]);
+
+    useEffect(() => {
+        const fetchHalls = async () => {
+            try {
+                const res = await api.get('/api/halls/');
+                // Handle both paginated responses (res.data.results) and flat arrays (res.data)
+                const hallsData = res.data?.results || res.data;
+                if (Array.isArray(hallsData)) {
+                    setHalls(hallsData);
+                } else {
+                    console.error("Expected array of halls, got:", res.data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch halls from backend:", err);
+            }
+        };
+        fetchHalls();
+    }, []);
 
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -34,7 +53,7 @@ export default function Signup({ setView, initialRole = 'student' }) {
                 name: formData.name,
                 email: formData.email,
                 roll_no: formData.role === 'student' ? formData.roll_no : '',
-                hall_of_residence: formData.role === 'student' ? formData.hall_of_residence : '',
+                hall_of_residence: formData.role === 'student' ? formData.hall_of_residence : null,
                 room_no: formData.role === 'student' ? formData.room_no : '',
                 contact_no: formData.contact_no,
                 role: formData.role,
@@ -123,20 +142,11 @@ export default function Signup({ setView, initialRole = 'student' }) {
                                 required
                             >
                                 <option value="" disabled>Select Hall of Residence</option>
-                                <option value="Hall 1">Hall 1</option>
-                                <option value="Hall 2">Hall 2</option>
-                                <option value="Hall 3">Hall 3</option>
-                                <option value="Hall 4">Hall 4</option>
-                                <option value="Hall 5">Hall 5</option>
-                                <option value="Hall 6">Hall 6</option>
-                                <option value="Hall 7">Hall 7</option>
-                                <option value="Hall 8">Hall 8</option>
-                                <option value="Hall 9">Hall 9</option>
-                                <option value="Hall 10">Hall 10</option>
-                                <option value="Hall 11">Hall 11</option>
-                                <option value="Hall 12">Hall 12</option>
-                                <option value="Hall 13">Hall 13</option>
-                                <option value="Hall 14">Hall 14</option>
+                                {halls.map((hall) => (
+                                    <option key={hall.id} value={hall.id}>
+                                        {hall.name}
+                                    </option>
+                                ))}
                             </select>
                         </div>
 

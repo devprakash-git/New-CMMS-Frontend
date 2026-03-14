@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { validateEmail } from '../../utils/validation';
 import api from '../../Api'; // Import the configured Axios instance
 
@@ -8,6 +9,7 @@ export default function Login({ setView, initialRole = 'student' }) {
     const [formData, setFormData] = useState({ email: '', password: '', role: initialRole });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -26,10 +28,8 @@ export default function Login({ setView, initialRole = 'student' }) {
         try {
             // Endpoint to hit the django backend
             const res = await api.post('/api/login/', formData);
-            // Assuming successful login triggers a redirect or context state update
-            // e.g. window.location.href = '/dashboard';
             console.log('Login Success:', res.data);
-            alert('Login Successful!');
+            navigate('/first');
         } catch (err) {
             console.error(err);
             setError(err.response?.data?.detail || err.response?.data?.message || 'Invalid credentials. Please try again.');

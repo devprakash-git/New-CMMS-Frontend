@@ -1,12 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePage';
+import FirstPage from './pages/FirstPage';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<AuthPage />} />
+        <Route path="/first" element={<FirstPage />} />
         {/* Redirect root to login for now */}
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<HomePage />} />
