@@ -122,11 +122,11 @@ const MyBookings = () => {
                         animate="visible"
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                     >
-                        {bookings.map((booking) => {
-                            const config = getStatusConfig(booking.status);
+                        {bookings.map((group) => {
+                            const config = getStatusConfig(group.status);
                             return (
                                 <motion.div
-                                    key={booking.id}
+                                    key={group.qr_code_id}
                                     variants={itemVariants}
                                     whileHover={{ y: -4 }}
                                     className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/5 transition-all duration-500 overflow-hidden flex flex-col p-8 group relative"
@@ -141,37 +141,51 @@ const MyBookings = () => {
                                         </div>
                                         <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                             <Utensils size={12} />
-                                            <span>Qty: {booking.quantity}</span>
+                                            <span>{group.items.length} item{group.items.length > 1 ? 's' : ''}</span>
                                         </div>
                                     </div>
 
-                                    <div className="mb-6">
-                                        <h3 className="text-xl font-black text-slate-900 leading-tight mb-1 group-hover:text-indigo-600 transition-colors duration-300">
-                                            {booking.item_name}
-                                        </h3>
-                                        <div className="flex items-center gap-2 text-slate-400 font-bold text-[10px] uppercase tracking-wider">
-                                            <Clock size={12} />
-                                            <span>
-                                                {new Date(booking.booked_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                                            </span>
-                                        </div>
+                                    {/* Items List */}
+                                    <div className="mb-6 space-y-2">
+                                        {group.items.map((item, idx) => (
+                                            <div key={idx} className="flex items-center justify-between">
+                                                <div>
+                                                    <h3 className="text-base font-black text-slate-900 leading-tight group-hover:text-indigo-600 transition-colors duration-300">
+                                                        {item.item_name}
+                                                    </h3>
+                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                                        Qty: {item.quantity} × ₹{item.item_cost}
+                                                    </span>
+                                                </div>
+                                                <span className="text-sm font-bold text-slate-700">
+                                                    ₹{(item.quantity * item.item_cost).toFixed(0)}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="flex items-center gap-2 text-slate-400 font-bold text-[10px] uppercase tracking-wider mb-4">
+                                        <Clock size={12} />
+                                        <span>
+                                            {new Date(group.booked_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                        </span>
                                     </div>
 
                                     {/* QR Code Area */}
                                     <div className="relative mb-8 aspect-square w-full">
                                         <div className={`absolute inset-0 bg-slate-50/50 rounded-3xl border border-slate-100 flex flex-col items-center justify-center p-8 transition-all duration-500 group-hover:bg-white ${config.blur ? 'blur-[8px]' : ''}`}>
-                                            <QRCodeSVG value={booking.qr_code_id} size={200} className="w-full h-full drop-shadow-sm" />
+                                            <QRCodeSVG value={group.qr_code_id} size={200} className="w-full h-full drop-shadow-sm" />
                                         </div>
                                         
                                         {/* Status Overlays */}
                                         {config.blur && (
                                             <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                                                 <div className={`w-12 h-12 ${config.bg} rounded-2xl flex items-center justify-center mb-4 border ${config.border} shadow-sm`}>
-                                                    {booking.status === 'cancelled' ? <Utensils className="text-rose-500 rotate-45" size={24} /> : <QrCode className={config.color} size={24} />}
+                                                    {group.status === 'cancelled' ? <Utensils className="text-rose-500 rotate-45" size={24} /> : <QrCode className={config.color} size={24} />}
                                                 </div>
                                                 <h4 className={`text-sm font-black uppercase tracking-widest ${config.color}`}>{config.label}</h4>
                                                 <p className="text-[10px] text-slate-500 font-bold mt-1 px-4 leading-relaxed">
-                                                    {booking.status === 'cancelled' ? 'This order has been cancelled.' : 'Collected from the mess counter.'}
+                                                    {group.status === 'cancelled' ? 'This order has been cancelled.' : 'Collected from the mess counter.'}
                                                 </p>
                                             </div>
                                         )}
@@ -180,10 +194,10 @@ const MyBookings = () => {
                                     <div className="mt-auto flex items-center justify-between">
                                         <div className="flex flex-col">
                                             <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Total Bill</span>
-                                            <span className={`text-xl font-black ${config.blur ? 'text-slate-400' : 'text-slate-900 group-hover:text-indigo-600'} transition-colors`}>₹{booking.item_cost * booking.quantity}</span>
+                                            <span className={`text-xl font-black ${config.blur ? 'text-slate-400' : 'text-slate-900 group-hover:text-indigo-600'} transition-colors`}>₹{group.total_cost}</span>
                                         </div>
                                         <div className="font-mono text-[9px] text-slate-300 font-bold uppercase tracking-[0.1em] group-hover:text-slate-400 transition-colors">
-                                            {booking.qr_code_id}
+                                            {group.qr_code_id}
                                         </div>
                                     </div>
                                 </motion.div>

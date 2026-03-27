@@ -19,6 +19,7 @@ import AdminFeedbackPage from './pages/AdminFeedbackPage';
 import AdminRebatePage from './pages/AdminRebatePage';
 import AdminMenuManagement from './pages/AdminMenuManagement';
 import AdminNotificationPage from './pages/AdminNotificationPage';
+import AdminQRScanPage from './pages/AdminQRScanPage';
 
 function App() {
   return (
@@ -114,6 +115,12 @@ function App() {
           <Route path='/admin-menu-management' element={
             <AdminProtectedRoute>
               <AdminMenuManagement/>
+            </AdminProtectedRoute>
+          }/>
+
+          <Route path='/admin-qr-scan' element={
+            <AdminProtectedRoute>
+              <AdminQRScanPage/>
             </AdminProtectedRoute>
           }/>
 

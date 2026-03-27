@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Bell, User, Utensils, LogOut, X, Phone, Home, Building, Menu, ReceiptText, Sparkles, Star, CalendarClock, ShoppingBag } from 'lucide-react';
+import { Bell, User, Utensils, LogOut, X, Phone, Home, Building, Menu, ReceiptText, Sparkles, Star, CalendarClock, ShoppingBag, ScanLine } from 'lucide-react';
 import api from '../../Api';
 
 export default function AdminNavBar({ profile, notifications: propNotifs, onOpenNotifications }) {
@@ -55,6 +55,7 @@ export default function AdminNavBar({ profile, notifications: propNotifs, onOpen
         { name: "Notifications", path: "/admin-notifications", icon: Bell },
         { name: "Rebate Management", path: "/admin-rebate", icon: CalendarClock },
         { name: "Menu Management", path: "/admin-menu-management", icon: Sparkles },
+        { name: "QR Scanner", path: "/admin-qr-scan", icon: ScanLine },
     ];
 
     return (
