@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AdminNavBar from '../components/utils/AdminNavBar';
-import { ReceiptText, ShoppingBag, Star, CalendarClock, Sparkles, Loader2, Bell } from 'lucide-react';
+import { ReceiptText, ShoppingBag, Star, CalendarClock, Sparkles, Loader2, Bell, ScanLine } from 'lucide-react';
 import api from '../Api';
 
 export default function AdminDashboard() {
@@ -94,6 +94,14 @@ export default function AdminDashboard() {
             color: "from-blue-500 to-indigo-500",
             bgLight: "bg-blue-50"
         },
+        {
+            title: "QR-Scanner",
+            desc: "Scan QR codes to verify student entries.",
+            icon: ScanLine,
+            link: "/admin-qr-scan",
+            color: "from-green-500 to-emerald-500",
+            bgLight: "bg-green-50"
+        }
     ];
 
     const containerVariants = {
