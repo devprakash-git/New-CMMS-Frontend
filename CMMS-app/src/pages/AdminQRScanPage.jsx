@@ -85,7 +85,7 @@ export default function AdminQRScanPage() {
         try {
             // Reuse existing instance or create a fresh one
             if (!qrRef.current) {
-                qrRef.current = new Html5Qrcode('qr-viewport');
+                qrRef.current = new Html5Qrcode('qr-viewport', true); // Enable verbose logging
             }
 
             const qr = qrRef.current;
@@ -97,7 +97,16 @@ export default function AdminQRScanPage() {
 
             await qr.start(
                 { facingMode: 'environment' },        // rear camera on mobile
-                { fps: 10, qrbox: { width: 250, height: 250 } },
+                { 
+                    fps: 10, // Lower FPS reduces CPU strain and improves success rate
+                    qrbox: (viewPortWidth, viewPortHeight) => {
+                        return {
+                            width: viewPortWidth * 0.7, // Take up 70% of the width
+                            height: viewPortWidth * 0.7 
+                        };
+                    },
+                    aspectRatio: 1.0 // Force a square aspect ratio to match the UI
+                },
                 (decodedText) => {
                     // Stop immediately so we don't double-fire
                     qr.stop().catch(() => {});
@@ -193,7 +202,7 @@ export default function AdminQRScanPage() {
                 >
                     {/* Viewport — html5-qrcode renders the video INSIDE this div */}
                     <div className="relative bg-slate-900 min-h-[320px] flex items-center justify-center">
-                        <div id="qr-viewport" className="w-full" />
+                        <div id="qr-viewport" className="w-full min-h-[300px]" />
 
                         {/* Placeholder when camera is off */}
                         {!scanning && (
@@ -207,9 +216,16 @@ export default function AdminQRScanPage() {
                             </div>
                         )}
 
+                        {/* Visual Guide Overlay */}
+                        {scanning && (
+                            <div className="absolute inset-0 border-[60px] border-black/40 pointer-events-none z-10 flex items-center justify-center">
+                                <div className="w-full h-full max-w-[250px] max-h-[250px] border-2 border-indigo-500 rounded-lg shadow-[0_0_20px_rgba(79,70,229,0.5)]" />
+                            </div>
+                        )}
+
                         {/* Live indicator */}
                         {scanning && (
-                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/60 backdrop-blur-sm rounded-full flex items-center gap-2 pointer-events-none">
+                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/60 backdrop-blur-sm rounded-full flex items-center gap-2 pointer-events-none z-20">
                                 <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
                                 <span className="text-white text-xs font-bold uppercase tracking-wider">Live — point at QR code</span>
                             </div>
