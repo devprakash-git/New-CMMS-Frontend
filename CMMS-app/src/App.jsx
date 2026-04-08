@@ -8,29 +8,26 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import AdminProtectedRoute from './components/auth/AdminProtectedRoute';
 import ExtrasPage from './pages/ExtrasPage';
 import RebatePage from './pages/RebatePage';
-import BillingPage from './pages/BillingPage';
-import MyBookings from './pages/MyBookings';
+import BillingPage from './pages/BillingPage'
 import CartPage from './pages/CartPage';
+import MyBookings from './pages/MyBookings';
+import { CartProvider } from './components/CartPage/CartContext';
 import AdminDashboard from './pages/AdminDashboard';
-import AdminFeedbackPage from './pages/AdminFeedbackPage';
-import AdminExtrasManagement from './pages/AdminExtrasManagement';
 import AdminBillingPage from './pages/AdminBillingPage';
-import AdminMenuManagement from './pages/AdminMenuManagement';
+import AdminExtrasManagement from './pages/AdminExtrasManagement';
+import AdminFeedbackPage from './pages/AdminFeedbackPage';
 import AdminRebatePage from './pages/AdminRebatePage';
+import AdminMenuManagement from './pages/AdminMenuManagement';
 import AdminNotificationPage from './pages/AdminNotificationPage';
 import AdminQRScanPage from './pages/AdminQRScanPage';
-import { CartProvider } from './components/CartPage/CartContext';
 
 function App() {
   return (
     <Router>
       <CartProvider>
         <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<AuthPage />} />
-
+          
           {/* Student Protected Routes */}
           <Route path="/first" element={
             <ProtectedRoute>
@@ -47,73 +44,89 @@ function App() {
               <ComplaintPage />
             </ProtectedRoute>
           } />
-          <Route path="/extras" element={
-            <ProtectedRoute>
-              <ExtrasPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/rebate" element={
-            <ProtectedRoute>
-              <RebatePage />
-            </ProtectedRoute>
-          } />
-          <Route path="/billing" element={
-            <ProtectedRoute>
-              <BillingPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/my-bookings" element={
-            <ProtectedRoute>
-              <MyBookings />
-            </ProtectedRoute>
-          } />
-          <Route path="/cart" element={
-            <ProtectedRoute>
-              <CartPage />
-            </ProtectedRoute>
-          } />
 
+          <Route path='/extras' element={
+            <ProtectedRoute>
+              <ExtrasPage/>
+            </ProtectedRoute>
+          }/>
+
+          <Route path='/rebate' element={
+            <ProtectedRoute>
+              <RebatePage/>
+            </ProtectedRoute>
+          }/>
+
+          <Route path='/billing' element={
+            <ProtectedRoute>
+              <BillingPage/>
+            </ProtectedRoute>
+          }/>
+
+          <Route path='/cart' element={
+            <ProtectedRoute>
+              <CartPage/>
+            </ProtectedRoute>
+          }/>
+
+          <Route path='/my-bookings' element={
+            <ProtectedRoute>
+              <MyBookings/>
+            </ProtectedRoute>
+          }/>
+          
           {/* Admin Protected Routes */}
-          <Route path="/admin-dashboard" element={
+          <Route path='/admin-dashboard' element={
             <AdminProtectedRoute>
-              <AdminDashboard />
+              <AdminDashboard/>
             </AdminProtectedRoute>
-          } />
-          <Route path="/admin-billing" element={
+          }/>
+
+          <Route path='/admin-billing' element={
             <AdminProtectedRoute>
-              <AdminBillingPage />
+              <AdminBillingPage/>
             </AdminProtectedRoute>
-          } />
-          <Route path="/admin-extras" element={
+          }/>
+
+          <Route path='/admin-extra-management' element={
             <AdminProtectedRoute>
-              <AdminExtrasManagement />
+              <AdminExtrasManagement/>
             </AdminProtectedRoute>
-          } />
-          <Route path="/admin-feedback" element={
+          }/>
+
+          <Route path='/admin-feedback' element={
             <AdminProtectedRoute>
-              <AdminFeedbackPage />
+              <AdminFeedbackPage/>
             </AdminProtectedRoute>
-          } />
-          <Route path="/admin-notifications" element={
+          }/>
+
+          <Route path='/admin-notifications' element={
             <AdminProtectedRoute>
               <AdminNotificationPage />
             </AdminProtectedRoute>
           } />
-          <Route path="/admin-rebate" element={
+
+          <Route path='/admin-rebate' element={
             <AdminProtectedRoute>
-              <AdminRebatePage />
+              <AdminRebatePage/>
             </AdminProtectedRoute>
-          } />
-          <Route path="/admin-menu" element={
+          }/>
+
+          <Route path='/admin-menu-management' element={
             <AdminProtectedRoute>
-              <AdminMenuManagement />
+              <AdminMenuManagement/>
             </AdminProtectedRoute>
-          } />
-          <Route path="/admin-qr-scan" element={
+          }/>
+
+          <Route path='/admin-qr-scan' element={
             <AdminProtectedRoute>
-              <AdminQRScanPage />
+              <AdminQRScanPage/>
             </AdminProtectedRoute>
-          } />
+          }/>
+
+          {/* Public Routes */}
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<HomePage />} />
         </Routes>
       </CartProvider>
     </Router>
