@@ -179,13 +179,12 @@ export default function Dashboard() {
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
                     >
                         {dashboardCards.map((card, index) => (
-                            <motion.a
-                                key={index}
-                                href={card.link}
+                            <motion.div
+                                key={index} // Since these are usually static menu items, index is fine
+                                onClick={() => navigate(card.link)} // Use the navigate hook here
                                 variants={itemVariants}
                                 whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                                // Modern fancy card styling
-                                className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 border border-slate-100 shadow-lg hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 flex flex-col text-left group relative overflow-hidden"
+                                className="cursor-pointer bg-white/90 backdrop-blur-lg rounded-3xl p-8 border border-slate-100 shadow-lg hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 flex flex-col text-left group relative overflow-hidden"
                             >
                                 {/* Fancy glowing background layer */}
                                 <div className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-300 pointer-events-none`} />
@@ -210,7 +209,7 @@ export default function Dashboard() {
 
                                 {/* Border accent active strictly on hover bottom line */}
                                 <div className={`absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r ${card.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`} />
-                            </motion.a>
+                            </motion.div>
                         ))}
                     </motion.div>
 
