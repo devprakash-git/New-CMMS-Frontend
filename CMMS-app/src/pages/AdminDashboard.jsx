@@ -168,12 +168,12 @@ export default function AdminDashboard() {
                             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                         >
                             {dashboardCards.map((card, index) => (
-                                <motion.a
+                                <motion.div
                                     key={index}
-                                    href={card.link}
+                                    onClick={() => navigate(card.link)} // Client-side navigation!
                                     variants={itemVariants}
                                     whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                                    className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 border border-slate-100 shadow-lg hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 flex flex-col text-left group relative overflow-hidden"
+                                    className="cursor-pointer bg-white/90 backdrop-blur-lg rounded-3xl p-8 border border-slate-100 shadow-lg hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 flex flex-col text-left group relative overflow-hidden"
                                 >
                                     <div className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-300 pointer-events-none`} />
 
@@ -194,7 +194,7 @@ export default function AdminDashboard() {
                                     </div>
 
                                     <div className={`absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r ${card.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`} />
-                                </motion.a>
+                                </motion.div>
                             ))}
                         </motion.div>
 

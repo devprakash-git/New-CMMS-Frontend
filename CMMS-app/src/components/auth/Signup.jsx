@@ -64,7 +64,22 @@ export default function Signup({ setView, initialRole = 'student' }) {
             setView('login'); // Redirect to login view on success
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.detail || err.response?.data?.message || 'Error creating account. Please try again.');
+            
+            const errorData = err.response?.data;
+            let specificError = '';
+
+            if (errorData) {
+                // 1. Check if the error is field-specific (e.g., email, roll_no)
+                // This converts { email: ["error"] } into a readable string
+                const fieldErrors = Object.entries(errorData)
+                    .map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(' ') : msgs}`)
+                    .join(' | ');
+                    
+                // 2. Fallback to detail, message, or the joined field errors
+                specificError = errorData.detail || errorData.message || fieldErrors;
+            }
+
+            setError(specificError || 'Error creating account. Please try again.');
         } finally {
             setLoading(false);
         }
