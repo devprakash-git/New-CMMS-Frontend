@@ -9,6 +9,7 @@ export default function RebateForm({ onSubmit }) {
     days: 0,
     reason: "",
   });
+  const [dateError, setDateError] = useState("");
 
   const calculateDays = (start, end) => {
     if (!start || !end) return 0;
@@ -23,11 +24,18 @@ export default function RebateForm({ onSubmit }) {
 
     let updated = { ...form, [name]: value };
 
-    if (name === "startDate" || name === "endDate") {
-      updated.days = calculateDays(
-        name === "startDate" ? value : form.startDate,
-        name === "endDate" ? value : form.endDate
-      );
+    if (name === "startDate") {
+      // If the new start date is after the current end date, reset end date
+      if (updated.endDate && value > updated.endDate) {
+        updated.endDate = "";
+        updated.days = 0;
+      } else {
+        updated.days = calculateDays(value, updated.endDate);
+      }
+      setDateError("");
+    } else if (name === "endDate") {
+      updated.days = calculateDays(updated.startDate, value);
+      setDateError("");
     }
 
     setForm(updated);
@@ -35,6 +43,16 @@ export default function RebateForm({ onSubmit }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        if (!form.startDate || !form.endDate) {
+          setDateError("Please select both start and end dates.");
+          return;
+        }
+        if (form.endDate < form.startDate) {
+          setDateError("End date cannot be before start date.");
+          return;
+        }
+
+        setDateError("");
         onSubmit(form); // send data to parent
     };
     return (
@@ -77,9 +95,14 @@ export default function RebateForm({ onSubmit }) {
             name="endDate"
             value={form.endDate}
             onChange={handleChange}
+            min={form.startDate || undefined}
             className="border p-2 rounded"
             />
         </div>
+
+        {dateError && (
+          <p className="text-red-500 text-sm">{dateError}</p>
+        )}
 
         <input
             type="number"
