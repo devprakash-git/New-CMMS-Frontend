@@ -166,8 +166,8 @@ export default function NavBar({ profile, notifications: propNotifs, onOpenNotif
                                     </button>
                                 </div>
                                 <div className="max-h-[350px] overflow-y-auto">
-                                    {localNotifs?.map((notif) => (
-                                        <div key={notif.id || Math.random()} className="p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors cursor-pointer text-sm">
+                                    {localNotifs?.map((notif, index) => (
+                                        <div key={notif.id || index} className="p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors cursor-pointer text-sm">
                                             <div className="flex justify-between font-medium mb-1.5">
                                                 <span className={notif.category === 'unseen' ? 'text-slate-900 font-bold flex items-center gap-2' : 'text-slate-600 flex items-center gap-2'}>
                                                     {notif.category === 'unseen' && <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full inline-block"></span>}
