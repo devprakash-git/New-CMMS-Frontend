@@ -19,6 +19,8 @@ const RebatePage = () => {
     const [location, setLocation] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const todayLocal = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split('T')[0];
+
     // Rebate Data
     const [rebates, setRebates] = useState([]);
     const [dailyRates, setDailyRates] = useState([]);
@@ -84,6 +86,14 @@ const RebatePage = () => {
         }
         if (endDate < startDate) {
             alert("End date cannot be before start date.");
+            return;
+        }
+
+        const sDate = new Date(startDate);
+        const eDate = new Date(endDate);
+        const diffDays = Math.ceil((eDate - sDate) / (1000 * 60 * 60 * 24)) + 1;
+        if (diffDays < 3) {
+            alert("Rebate requests require a minimum of 3 consecutive days.");
             return;
         }
 
@@ -188,6 +198,7 @@ const RebatePage = () => {
                                             <input
                                                 type="date"
                                                 value={startDate}
+                                                min={todayLocal}
                                                 onChange={(e) => {
                                                     const newStart = e.target.value;
                                                     setStartDate(newStart);
@@ -209,7 +220,7 @@ const RebatePage = () => {
                                                 type="date"
                                                 value={endDate}
                                                 onChange={(e) => setEndDate(e.target.value)}
-                                                min={startDate || undefined}
+                                                min={startDate || todayLocal}
                                                 className="w-full pl-12 pr-4 py-3.5 bg-white border border-slate-200 rounded-xl font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all cursor-pointer"
                                                 required
                                             />
